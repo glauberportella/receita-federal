@@ -1,0 +1,45 @@
+[
+    {
+        "name": "brikou/zend_dom",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/brikou/zend_dom.git",
+            "reference": "434fb28294d0ebfd47a15cc1922714103c64f9d4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/brikou/zend_dom/zipball/434fb28294d0ebfd47a15cc1922714103c64f9d4",
+            "reference": "434fb28294d0ebfd47a15cc1922714103c64f9d4",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2012-05-09 13:29:23",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Zend\\Dom": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Zend Framework"
+        ],
+        "authors": [
+            {
+                "name": "Zend Technologies USA, Inc.",
+                "homepage": "http://framework.zend.com/"
+            }
+        ],
+        "description": "Zend Framework Dom Library",
+        "homepage": "https://github.com/brikou/zend_dom",
+        "keywords": [
+            "Zend Framework",
+            "dom"
+        ]
+    }
+]
