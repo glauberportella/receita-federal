@@ -10,7 +10,7 @@ A biblioteca não burla o sistema de captcha da Receita, o primeiro passo é obt
 o captcha e exibí-lo ao usuário e solicitar que o usuário digite os caracteres.
 
 ```php
-// $cookieFile deve ser o caminho onde será salvo cookie da receita federal
+// $cookieFilePath deve ser o caminho onde será salvo cookie da receita federal
 $rfCaptcha = new \ReceitaFederal\Cnpj\RfCaptcha($cookieFilePath);
 
 // obtem imagem e token viewstate da receita
