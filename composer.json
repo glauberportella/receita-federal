@@ -1,6 +1,6 @@
 {
     "minimum-stability": "dev",
-    "name": "glauberportella/ReceitaFederal",
+    "name": "glauberportella/receita-federal",
     "description": "Webservice para consulta a CNPJ na Receita Federal",
     "keywords": ["cnpj", "consulta", "receita", "brasil"],
     "homepage": "http://www.desenvolve4web.com",
