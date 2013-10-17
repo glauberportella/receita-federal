@@ -16,6 +16,6 @@
         "brikou/zend_dom": "dev-master"
     },
     "autoload": {
-        "psr-0": { "": "/" }
+        "psr-0": { "ReceitaFederal": "" }
     }
 }

@@ -7,5 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Zend\\Dom' => array($vendorDir . '/brikou/zend_dom'),
-    '' => array('/'),
+    'ReceitaFederal' => array($baseDir . '/'),
 );
