@@ -53,16 +53,16 @@ class RfParser
 			$prox = trim($q->item(($i+1))->nodeValue);
 
 			if($current == 'NÚMERO DE INSCRIÇÃO')
-				$campos['numeroInsc'] = preg_replace('/[a-zA-Z]+/i', '', $prox);                            
+				$campos['numero_inscricao'] = preg_replace('/[a-zA-Z]+/i', '', $prox);                            
 
 			if($current == 'DATA DE ABERTURA')
-				$campos['dataAber'] = $prox;                  
+				$campos['data_abertura'] = $prox;                  
 
 			if($current == 'NOME EMPRESARIAL')
-				$campos['nomeEmpre'] = $prox;                           
+				$campos['nome_empresarial'] = $prox;                           
 
 			if($current == 'TÍTULO DO ESTABELECIMENTO (NOME DE FANTASIA)')
-				$campos['tituloEstab'] = $prox;
+				$campos['titulo_estabelecimento'] = $prox;
 
 			if($current == 'CÓDIGO E DESCRIÇÃO DA ATIVIDADE ECONÔMICA PRINCIPAL')
 			{
@@ -75,7 +75,7 @@ class RfParser
 					$prox = strtolower(trim(utf8_decode($q->item(($i+1))->nodeValue)));
 				}
 				*/
-				$campos['codDescAtivEconPrin'] = $prox;
+				$campos['descricao_cnae_principal'] = $prox;
 				if (preg_match('/\d+\.\d+\-\d+\-\d+/', $prox, $matches)) {
 					$campos['cnae'] = str_replace('.', '', str_replace('-', '', $matches[0]));
 				}
@@ -92,11 +92,11 @@ class RfParser
 					$prox = strtolower(trim(utf8_decode($q->item(($i+1))->nodeValue)));
 				}
 				*/                          
-				$campos['codDescAtivEconSec'] = $prox;
+				$campos['descricao_cnae_secundaria'] = $prox;
 			}
 
 			if($current == 'CÓDIGO E DESCRIÇÃO DA NATUREZA JURÍDICA')
-				$campos['codDescNatJur'] = $prox;                                      
+				$campos['codigo_descricao_natureza_juridica'] = $prox;                                      
 			if($current == 'LOGRADOURO')
 				$campos['logradouro'] = $prox;                              
 
@@ -118,12 +118,12 @@ class RfParser
 				$campos['uf'] = $prox;
 
 			if($current == 'SITUAÇÃO CADASTRAL')
-				$campos['sitCad'] = $prox;
+				$campos['situacao_cadastral'] = $prox;
 
 			if($current == 'DATA DA SITUAÇÃO CADASTRAL')
-				$campos['dataSitCad'] = $prox;                                              
+				$campos['data_situacao_cadastral'] = $prox;                                              
 			if($current == 'MOTIVO DE SITUAÇÃO CADASTRAL')
-				$campos['motivoSitCad'] = $prox;
+				$campos['motivo_situacao_cadastral'] = $prox;
 		}
 		
 		return $campos;
