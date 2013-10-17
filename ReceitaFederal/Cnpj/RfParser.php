@@ -1,6 +1,7 @@
 <?php
 namespace ReceitaFederal\Cnpj;
 
+use ReceitaFederal\Cnpj\RfCaptcha;
 use ReceitaFederal\Curl\RfCurl;
 
 class RfParser
@@ -155,7 +156,7 @@ class RfParser
 		curl_setopt($ch, CURLOPT_COOKIEJAR, $this->rfcaptcha->getCookieFile());
 		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:8.0) Gecko/20100101 Firefox/8.0');
 		curl_setopt($ch, CURLOPT_COOKIE, http_build_query($cookie, NULL, '&'));
-		curl_setopt($ch, CURLOPT_REFERER, \RfCaptcha::RFCAPTCHA_REQUEST_URL);
+		curl_setopt($ch, CURLOPT_REFERER, RfCaptcha::RFCAPTCHA_REQUEST_URL);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 		$maxredirect = 3;
