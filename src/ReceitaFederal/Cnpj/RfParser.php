@@ -141,10 +141,10 @@ class RfParser
 			'origem' => 'comprovante',
 			'search_type' => 'cnpj',
 			'cnpj' => $this->inputCnpj,
-			'captcha' => $this->inputCaptcha,
+			'txtTexto_captcha_serpro_gov_br' => $this->inputCaptcha,
 			'captchaAudio' => '',
 			'submit1' => 'Consultar',
-			'viewstate' => $this->rfcaptcha->getToken()
+			//'viewstate' => $this->rfcaptcha->getToken()
 		);
 		$post = http_build_query($post, NULL, '&');
         // tenho que enviar esse cookie pra eles ?

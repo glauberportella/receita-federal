@@ -1,5 +1,6 @@
-receita-federal
-===============
+#receita-federal
+
+## EM ATUALIZAÇÃO - AGUARDEM
 
 Consultas na Receita Federal, atualmente somente consulta CNPJ.
 

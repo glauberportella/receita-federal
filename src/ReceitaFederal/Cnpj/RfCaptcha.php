@@ -9,6 +9,7 @@ use Zend\Dom\Query;
 
 class RfCaptcha implements \Serializable
 {
+	const RFCAPTCHA_BASE = 'http://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva';
 	const RFCAPTCHA_REQUEST_URL = 'http://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/Cnpjreva_Solicitacao2.asp?cnpj=';
 	const RFCAPTCHA_URL = 'http://www.receita.fazenda.gov.br/scripts/captcha/Telerik.Web.UI.WebResource.axd?type=rca&guid=';
 	const RFCAPTCHA_VALIDA_URL = 'http://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/valida.asp';
@@ -17,6 +18,8 @@ class RfCaptcha implements \Serializable
 	protected $cookieFile;
 	protected $idCaptcha;
 	protected $token;
+
+	private $captchaImgUrl;
 
 	public function __construct($cookiePath = '')
 	{
@@ -50,7 +53,7 @@ class RfCaptcha implements \Serializable
 		$url_imagem = $tokenValue = '';
 
 	    // pra quem está acostumado com jquery vai achar isso bem familiar, vou pegar a imagem que possuir o id imgcaptcha
-		$img = $dom->execute('#imgcaptcha');
+		$img = $dom->execute('#imgCaptcha');
 		// verifico se pegou alguma coisa
 		if(count($img))
 	    {
@@ -64,6 +67,13 @@ class RfCaptcha implements \Serializable
 				}
 			}
 
+			if ($url_imagem) {
+				$url_imagem = self::RFCAPTCHA_BASE . '/' . preg_replace('#^\./#i', '', $url_imagem);
+			}
+
+			$this->captchaImgUrl = $url_imagem;
+
+			/*
 			// essa er eh pra pegar somente o id do captcha
 			if(preg_match('#guid=(.*)$#', $url_imagem, $arr))
 			{
@@ -88,6 +98,7 @@ class RfCaptcha implements \Serializable
 					$this->token = $tokenValue;
 				}
 			}
+			*/
 		}		
 	}
 
@@ -156,30 +167,68 @@ class RfCaptcha implements \Serializable
 
 	public function getCaptcha()
 	{
+		if (!$this->captchaImgUrl)
+			return null;
+
+		// tmp file for mime verification
+		$tmpFilename = $this->cookiePath.DIRECTORY_SEPARATOR.uniqid();
+		$fp = fopen($tmpFilename, 'wb');
+		if (!$fp)
+			return null;
+		if (!fwrite($fp, file_get_contents($this->captchaImgUrl)))
+			return null;
+		$mime = mime_content_type($tmpFilename);
+		if (!$mime)
+			return null;
+		fclose($fp);
+		unlink($tmpFilename);
+
+		switch ($mime) {
+			case 'image/png':
+				$img = imagecreatefrompng($this->captchaImgUrl);
+				break;
+			case 'image/jpeg':
+				$img = imagecreatefromjpeg($this->captchaImgUrl);
+				break;
+			case 'image/gif':
+				$img = imagecreatefromgif($this->captchaImgUrl);
+				break;
+			default:
+				return null;
+		}
+
+		$imgfile = $this->cookiePath.DIRECTORY_SEPARATOR.'receita.jpg';
+
+		if (false === imagejpeg($img, $imgfile))
+        	throw new RfCaptchaImageException('Ocorreu erro ao salvar imagem do captcha no servidor. Caminho "'.$this->cookiePath.'".');
+
+        return basename($imgfile);
+
+		/*
 		if(preg_match('#^[a-z0-9-]{36}$#', $this->idCaptcha))
 		{
 		    $url = self::RFCAPTCHA_URL.$this->idCaptcha;
 
-		    /* poderiamos fazer simplemente
-		    * $imgsource = file_get_contents($url);
-		    * mas, para evitar possíveis problemas com allow_url_fopen
-		    * vamos usar somente curl pra garantir
-		    */
+		    //  poderiamos fazer simplemente
+		    // * $imgsource = file_get_contents($url);
+		    // * mas, para evitar possíveis problemas com allow_url_fopen
+		    // * vamos usar somente curl pra garantir
+		    
 		    $ch = curl_init($url);
 		    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  
 		    $imgsource = curl_exec($ch);
 		    $content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 		    curl_close($ch);
-		    /* se tiver obtido sucesso em pegar a imagem
-		    * crio uma imagem a partir da string usando imagecreatefromstring
-		    * e seto o header para image/jpg e mando
-		    * o browser exibir ela.
-		    * poderia usar curl_getinfo($ch) para analisar
-		    * CONTENT_TYPE retornado pelo servidor, pra garantir
-		    * que é uma imagem e o formato é jpg, pois caso
-		    * o id tenha expirado o server retorna um gif, então
-		    * deixo isso como exercício.
-		    */
+		    //  se tiver obtido sucesso em pegar a imagem
+		    // * crio uma imagem a partir da string usando imagecreatefromstring
+		    // * e seto o header para image/jpg e mando
+		    // * o browser exibir ela.
+		    // * poderia usar curl_getinfo($ch) para analisar
+		    // * CONTENT_TYPE retornado pelo servidor, pra garantir
+		    // * que é uma imagem e o formato é jpg, pois caso
+		    // * o id tenha expirado o server retorna um gif, então
+		    // * deixo isso como exercício.
+		    
 	    	if (!in_array($content_type, array('image/jpg', 'image/jpeg')))
 	    		throw new RfCaptchaContentTypeException('ContentType inválido, esperado image/jpeg obteve '.$content_type.'. Possivelmente o ID de sessão expirou na requisição à Receita Federal.');
 
@@ -201,5 +250,7 @@ class RfCaptcha implements \Serializable
 		}
 
 		return null;
+		*/
+
 	}
 }
